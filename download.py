@@ -4,6 +4,8 @@ import sys
 import os
 import hashlib
 from pymediainfo import MediaInfo
+import subprocess
+
 
 SDO_WEBSITE = "http://sdo.gsfc.nasa.gov"
 
@@ -14,7 +16,8 @@ MPEGS = ['0193.mpg', '0304.mpg', '0171.mpg', '0211.mpg', '0131.mpg', '0335.mpg',
 STANFORD_WEBSITE = "http://jsoc.stanford.edu/data/hmi/movies/latest"
 HMIS = ['M_2d.mpg', 'M_color_2d.mpg', 'Ic_flat_2d.mpg']
 
-SAVE_FOLDER = "/home/max/starburn_download"
+# SAVE_FOLDER = "/home/max/starburn_download"
+SAVE_FOLDER = "/Users/max/repos/starburn/download"
 
 def check_tmp():
 	if not os.path.exists(SAVE_FOLDER):
@@ -42,6 +45,7 @@ def get_length(filepath):
 	mi = MediaInfo.parse(filepath)
 	for track in mi.tracks:
 		if track.track_type == "Video":
+			print "\tGot Length: %s" % track.duration
 			return track.duration
 	return None
 
@@ -51,21 +55,24 @@ def download(url):
 	basename = os.path.basename(url)
 	extension = basename.split('.')[1]
 
-	# try:
-	filepath = os.path.join(SAVE_FOLDER, basename)
-	urllib.urlretrieve(url, filepath)
+	try:
+		filepath = os.path.join(SAVE_FOLDER, basename)
+		urllib.urlretrieve(url, filepath)
 
-	length = get_length(filepath)
-	if not length:
-		os.remove(filepath)
-		return
+		length = get_length(filepath)
+		if not length:
+			os.remove(filepath)
+			return
 
-	md5 = get_md5(filepath)
-	
-	os.rename(filepath, os.path.join(SAVE_FOLDER, "%s-%s.%s" % (md5, length, extension)))
+		md5 = get_md5(filepath)
+		
+		newFilename = "%s-%s.%s" % (md5, length, extension)
+		print "\tRenaming: %s" % newFilename
+		os.rename(filepath, os.path.join(SAVE_FOLDER, newFilename))
+		return newFilename
 
-	# except Exception as e:
-	# 	print "Error downloading %s: %s" % (filepath, e)
+	except Exception as e:
+		print "Error downloading %s: %s" % (filepath, e)
 
 if __name__ == "__main__":
 
@@ -75,5 +82,26 @@ if __name__ == "__main__":
 		print "Error connection to %s" % SDO_WEBSITE
 		sys.exit(1)
 
-	for mpeg in MPEGS:
-		download(SDO_WEBSITE + LATEST_FOLDER + "/mpeg/latest_1024_" + mpeg)
+	downloadedFiles = []
+
+	# for mpeg in MPEGS:
+	# 	filename = download(SDO_WEBSITE + LATEST_FOLDER + "/mpeg/latest_1024_" + mpeg)
+	# 	downloadedFiles.append(filename)
+
+
+	# with open('allfiles.txt', 'w') as outfile:
+
+	# 	print "\nGenerating ffmpeg input list"
+
+	# 	for filename in downloadedFiles:
+	# 		if filename is not None:
+	# 			outfile.write("file %s\n" % filename)
+
+	print "\nCombining videos"
+
+	ffmpeg = subprocess.call(['ffmpeg', '-f', 'concat', '-i', 'allfiles.txt', '-c', 'copy', 'output.mpg'])
+
+
+
+
+
