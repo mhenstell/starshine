@@ -3,7 +3,7 @@ import urllib
 import sys
 import os
 import hashlib
-from pymediainfo import MediaInfo
+# from pymediainfo import MediaInfo
 import subprocess
 
 
@@ -41,13 +41,13 @@ def get_md5(filepath, blocksize=8192):
 		md5.update(data)
 	return md5.hexdigest()	
 
-def get_length(filepath):
-	mi = MediaInfo.parse(filepath)
-	for track in mi.tracks:
-		if track.track_type == "Video":
-			print "\tGot Length: %s" % track.duration
-			return track.duration
-	return None
+# def get_length(filepath):
+# 	mi = MediaInfo.parse(filepath)
+# 	for track in mi.tracks:
+# 		if track.track_type == "Video":
+# 			print "\tGot Length: %s" % track.duration
+# 			return track.duration
+# 	return None
 
 def download(url):
 	print "Downloading: %s" % url
@@ -59,10 +59,10 @@ def download(url):
 		filepath = os.path.join(SAVE_FOLDER, basename)
 		urllib.urlretrieve(url, filepath)
 
-		length = get_length(filepath)
-		if not length:
-			os.remove(filepath)
-			return
+		# length = get_length(filepath)
+		# if not length:
+		# 	os.remove(filepath)
+		# 	return
 
 		md5 = get_md5(filepath)
 		
