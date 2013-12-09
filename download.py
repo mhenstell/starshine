@@ -7,14 +7,12 @@ import hashlib
 import subprocess
 
 
-SDO_WEBSITE = "http://sdo.gsfc.nasa.gov"
-
-LATEST_FOLDER = "/assets/img/latest"
-MPEGS = ['0193.mpg', '0304.mpg', '0171.mpg', '0211.mpg', '0131.mpg', '0335.mpg', \
-'0094.mpg', '1600.mpg', '1700.mpg', '4500.mpg', 'EVE_latest_rotation.mp4']
+SDO_WEBSITE = "http://sdo.gsfc.nasa.gov/assets/img/latest"
+SDO_MOVIES = ['0193.mp4', '0304.mp4', '0171.mp4', '0211.mp4', '0131.mp4', '0335.mp4', \
+'0094.mp4', '1600.mp4', '1700.mp4', '4500.mp4', 'EVE_latest_rotation.mp4']
 
 STANFORD_WEBSITE = "http://jsoc.stanford.edu/data/hmi/movies/latest"
-HMIS = ['M_2d.mpg', 'M_color_2d.mpg', 'Ic_flat_2d.mpg']
+STANFORD_MOVIES = ['M_2d.mp4', 'M_color_2d.mp4', 'Ic_flat_2d.mp4']
 
 #SAVE_FOLDER = "/home/sun/starshine_download"
 SAVE_FOLDER = "/Users/max/repos/starshine/download"
@@ -84,8 +82,12 @@ if __name__ == "__main__":
 
 	downloadedFiles = []
 
-	for mpeg in MPEGS:
-		filename = download(SDO_WEBSITE + LATEST_FOLDER + "/mpeg/latest_1024_" + mpeg)
+	for movie in SDO_MOVIES:
+		filename = download(SDO_WEBSITE + "/mpeg/latest_1024_" + movie)
+		downloadedFiles.append(filename)
+
+	for movie in STANFORD_MOVIES:
+		filename = download(STANFORD_WEBSITE + "/" + movie)
 		downloadedFiles.append(filename)
 
 
@@ -102,6 +104,27 @@ if __name__ == "__main__":
 	# ffmpeg = subprocess.call(['ffmpeg', '-f', 'concat', '-i', 'allfiles.txt', '-c', 'copy', 'output.mpg'])
 
 
+	# import os
+
+	# for dirpath, dnames, fnames in os.walk("./download"):
+	# 	for fname in fnames:
+	# 		if fname.endswith(".mp4"):
+	# 			downloadedFiles.append(fname)
+
+
+
+	for fname in downloadedFiles:
+		outName = "transcoded/" + fname
+		fname = "download/" + fname
+		#print fname, outName
+		ffmpeg = subprocess.call(['ffmpeg', '-i', fname, '-vf', "scale=1024:720,pad='ih*16/9:ih:(ow-iw)/2:(oh-ih)/2'", '-q:v', '7', '-y', outName])
+		# print subprocess.list2cmdline(['ffmpeg', '-i', fname, '-vf', "scale=1024:720,pad='ih*16/9:ih:(ow-iw)/2:(oh-ih)/2'", '-q:v', '7', '-y', outName])
+		# cmd = 'ffmpeg -i %s -vf scale=1024:720,pad="ih*16/9:ih:(ow-iw)/2:(oh-ih)/2" -q:v 7 %s' % (fname, outName)
+
+	zipper = subprocess.call(['zip', '-r', 'movies.zip', 'transcoded'])
+
+
 # ffmpeg -i latest_1024_0094.mpg -vf scale=1024:720,pad="ih*16/9:ih:(ow-iw)/2:(oh-ih)/2" -q:v 7 output.mpg
 # mplayer output.mpg -vo x11 -fs
+# ffmpeg = subprocess.call(['ffmpeg', '-f', 'concat', '-i', 'allfiles.txt', '-c', 'copy', 'output.mpg'])
 
