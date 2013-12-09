@@ -17,6 +17,10 @@ STANFORD_MOVIES = ['M_2d.mp4', 'M_color_2d.mp4', 'Ic_flat_2d.mp4']
 #SAVE_FOLDER = "/home/sun/starshine_download"
 SAVE_FOLDER = "/Users/max/repos/starshine/download"
 
+TRANSCODE_FOLDER = "/home/sun/starshine_transcoded"
+
+ZIP_FOLDER = "/home/sun/movies.zip"
+
 def check_tmp():
 	if not os.path.exists(SAVE_FOLDER):
 		os.mkdir(SAVE_FOLDER)
@@ -114,14 +118,14 @@ if __name__ == "__main__":
 
 
 	for fname in downloadedFiles:
-		outName = "transcoded/" + fname
-		fname = "download/" + fname
+		outName = TRANSCODE_FOLDER + "/" + fname
+		fname = SAVE_FOLDER + "/" + fname
 		#print fname, outName
 		ffmpeg = subprocess.call(['ffmpeg', '-i', fname, '-vf', "scale=1024:720,pad='ih*16/9:ih:(ow-iw)/2:(oh-ih)/2'", '-q:v', '7', '-y', outName])
 		# print subprocess.list2cmdline(['ffmpeg', '-i', fname, '-vf', "scale=1024:720,pad='ih*16/9:ih:(ow-iw)/2:(oh-ih)/2'", '-q:v', '7', '-y', outName])
 		# cmd = 'ffmpeg -i %s -vf scale=1024:720,pad="ih*16/9:ih:(ow-iw)/2:(oh-ih)/2" -q:v 7 %s' % (fname, outName)
 
-	zipper = subprocess.call(['zip', '-r', 'movies.zip', 'transcoded'])
+	zipper = subprocess.call(['zip', '-r', ZIP_FOLDER, TRANSCODE_FOLDER])
 
 
 # ffmpeg -i latest_1024_0094.mpg -vf scale=1024:720,pad="ih*16/9:ih:(ow-iw)/2:(oh-ih)/2" -q:v 7 output.mpg
