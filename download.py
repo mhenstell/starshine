@@ -16,8 +16,8 @@ MPEGS = ['0193.mpg', '0304.mpg', '0171.mpg', '0211.mpg', '0131.mpg', '0335.mpg',
 STANFORD_WEBSITE = "http://jsoc.stanford.edu/data/hmi/movies/latest"
 HMIS = ['M_2d.mpg', 'M_color_2d.mpg', 'Ic_flat_2d.mpg']
 
-# SAVE_FOLDER = "/home/max/starburn_download"
-SAVE_FOLDER = "/Users/max/repos/starburn/download"
+#SAVE_FOLDER = "/home/sun/starshine_download"
+SAVE_FOLDER = "/Users/max/repos/starshine/download"
 
 def check_tmp():
 	if not os.path.exists(SAVE_FOLDER):
@@ -66,7 +66,7 @@ def download(url):
 
 		md5 = get_md5(filepath)
 		
-		newFilename = "%s-%s.%s" % (md5, length, extension)
+		newFilename = "%s.%s" % (md5, extension)
 		print "\tRenaming: %s" % newFilename
 		os.rename(filepath, os.path.join(SAVE_FOLDER, newFilename))
 		return newFilename
@@ -84,9 +84,9 @@ if __name__ == "__main__":
 
 	downloadedFiles = []
 
-	# for mpeg in MPEGS:
-	# 	filename = download(SDO_WEBSITE + LATEST_FOLDER + "/mpeg/latest_1024_" + mpeg)
-	# 	downloadedFiles.append(filename)
+	for mpeg in MPEGS:
+		filename = download(SDO_WEBSITE + LATEST_FOLDER + "/mpeg/latest_1024_" + mpeg)
+		downloadedFiles.append(filename)
 
 
 	# with open('allfiles.txt', 'w') as outfile:
@@ -97,11 +97,11 @@ if __name__ == "__main__":
 	# 		if filename is not None:
 	# 			outfile.write("file %s\n" % filename)
 
-	print "\nCombining videos"
+	# print "\nCombining videos"
 
-	ffmpeg = subprocess.call(['ffmpeg', '-f', 'concat', '-i', 'allfiles.txt', '-c', 'copy', 'output.mpg'])
-
-
+	# ffmpeg = subprocess.call(['ffmpeg', '-f', 'concat', '-i', 'allfiles.txt', '-c', 'copy', 'output.mpg'])
 
 
+# ffmpeg -i latest_1024_0094.mpg -vf scale=1024:720,pad="ih*16/9:ih:(ow-iw)/2:(oh-ih)/2" -q:v 7 output.mpg
+# mplayer output.mpg -vo x11 -fs
 
