@@ -17,7 +17,9 @@ STANFORD_MOVIES = ['M_2d.mp4', 'M_color_2d.mp4', 'Ic_flat_2d.mp4']
 #SAVE_FOLDER = "/home/sun/starshine_download"
 SAVE_FOLDER = "/Users/max/repos/starshine/download"
 
-TRANSCODE_FOLDER = "/home/sun/starshine_transcoded"
+#TRANSCODE_FOLDER = "/home/sun/starshine_transcoded"
+#TRANSCODE_FOLDER = "/home/sun/starshine_transcoded2"
+TRANSCODE_FOLDER = "/Users/max/repos/starshine/transcoded"
 
 ZIP_FOLDER = "/home/sun/movies.zip"
 
@@ -86,13 +88,13 @@ if __name__ == "__main__":
 
 	downloadedFiles = []
 
-	for movie in SDO_MOVIES:
-		filename = download(SDO_WEBSITE + "/mpeg/latest_1024_" + movie)
-		downloadedFiles.append(filename)
+	# for movie in SDO_MOVIES:
+	# 	filename = download(SDO_WEBSITE + "/mpeg/latest_1024_" + movie)
+	# 	downloadedFiles.append(filename)
 
-	for movie in STANFORD_MOVIES:
-		filename = download(STANFORD_WEBSITE + "/" + movie)
-		downloadedFiles.append(filename)
+	# for movie in STANFORD_MOVIES:
+	# 	filename = download(STANFORD_WEBSITE + "/" + movie)
+	# 	downloadedFiles.append(filename)
 
 
 	# with open('allfiles.txt', 'w') as outfile:
@@ -108,12 +110,12 @@ if __name__ == "__main__":
 	# ffmpeg = subprocess.call(['ffmpeg', '-f', 'concat', '-i', 'allfiles.txt', '-c', 'copy', 'output.mpg'])
 
 
-	# import os
+	import os
 
-	# for dirpath, dnames, fnames in os.walk("./download"):
-	# 	for fname in fnames:
-	# 		if fname.endswith(".mp4"):
-	# 			downloadedFiles.append(fname)
+	for dirpath, dnames, fnames in os.walk("./download"):
+		for fname in fnames:
+			if fname.endswith(".mp4"):
+				downloadedFiles.append(fname)
 
 
 
@@ -121,11 +123,11 @@ if __name__ == "__main__":
 		outName = TRANSCODE_FOLDER + "/" + fname
 		fname = SAVE_FOLDER + "/" + fname
 		#print fname, outName
-		ffmpeg = subprocess.call(['ffmpeg', '-i', fname, '-vf', "scale=1024:720,pad='ih*16/9:ih:(ow-iw)/2:(oh-ih)/2'", '-q:v', '7', '-y', outName])
-		# print subprocess.list2cmdline(['ffmpeg', '-i', fname, '-vf', "scale=1024:720,pad='ih*16/9:ih:(ow-iw)/2:(oh-ih)/2'", '-q:v', '7', '-y', outName])
-		# cmd = 'ffmpeg -i %s -vf scale=1024:720,pad="ih*16/9:ih:(ow-iw)/2:(oh-ih)/2" -q:v 7 %s' % (fname, outName)
+		#ffmpeg = subprocess.call(['ffmpeg', '-i', fname, '-vf', "scale=1024:720,pad='ih*16/9:ih:(ow-iw)/2:(oh-ih)/2'", '-q:v', '7', '-y', outName])
+		
+		ffmpeg = subprocess.call(['ffmpeg', '-i', fname, '-vf', "crop=1024:576", '-q:v', '7', '-y', outName])
 
-	zipper = subprocess.call(['zip', '-r', ZIP_FOLDER, TRANSCODE_FOLDER])
+	# zipper = subprocess.call(['zip', '-r', ZIP_FOLDER, TRANSCODE_FOLDER])
 
 
 # ffmpeg -i latest_1024_0094.mpg -vf scale=1024:720,pad="ih*16/9:ih:(ow-iw)/2:(oh-ih)/2" -q:v 7 output.mpg
