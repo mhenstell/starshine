@@ -125,7 +125,7 @@ if __name__ == "__main__":
 		#print fname, outName
 		#ffmpeg = subprocess.call(['ffmpeg', '-i', fname, '-vf', "scale=1024:720,pad='ih*16/9:ih:(ow-iw)/2:(oh-ih)/2'", '-q:v', '7', '-y', outName])
 		
-		ffmpeg = subprocess.call(['ffmpeg', '-i', fname, '-vf', "crop=1024:576", '-q:v', '7', '-y', outName])
+		ffmpeg = subprocess.call(['ffmpeg', '-i', fname, '-vf', "crop=1024:720,scale=1280:720", '-q:v', '7', '-y', outName])
 
 	# zipper = subprocess.call(['zip', '-r', ZIP_FOLDER, TRANSCODE_FOLDER])
 
