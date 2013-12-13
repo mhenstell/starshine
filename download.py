@@ -88,13 +88,13 @@ if __name__ == "__main__":
 
 	downloadedFiles = []
 
-	# for movie in SDO_MOVIES:
-	# 	filename = download(SDO_WEBSITE + "/mpeg/latest_1024_" + movie)
-	# 	downloadedFiles.append(filename)
+	for movie in SDO_MOVIES:
+		filename = download(SDO_WEBSITE + "/mpeg/latest_1024_" + movie)
+		downloadedFiles.append(filename)
 
-	# for movie in STANFORD_MOVIES:
-	# 	filename = download(STANFORD_WEBSITE + "/" + movie)
-	# 	downloadedFiles.append(filename)
+	for movie in STANFORD_MOVIES:
+		filename = download(STANFORD_WEBSITE + "/" + movie)
+		downloadedFiles.append(filename)
 
 
 	# with open('allfiles.txt', 'w') as outfile:
@@ -110,12 +110,12 @@ if __name__ == "__main__":
 	# ffmpeg = subprocess.call(['ffmpeg', '-f', 'concat', '-i', 'allfiles.txt', '-c', 'copy', 'output.mpg'])
 
 
-	import os
+	# import os
 
-	for dirpath, dnames, fnames in os.walk("./download"):
-		for fname in fnames:
-			if fname.endswith(".mp4"):
-				downloadedFiles.append(fname)
+	# for dirpath, dnames, fnames in os.walk("./download"):
+	# 	for fname in fnames:
+	# 		if fname.endswith(".mp4"):
+	# 			downloadedFiles.append(fname)
 
 
 
