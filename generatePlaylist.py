@@ -1,11 +1,11 @@
 from pymediainfo import MediaInfo
 import os
 
-#TRANSCODE_FOLDER = "/home/sun/starshine_transcoded"
-TRANSCODE_FOLDER = "/Users/max/repos/starshine/transcoded"
+TRANSCODE_FOLDER = "/home/pi/starshine_transcoded"
+#TRANSCODE_FOLDER = "/Users/max/repos/starshine/transcoded"
 
-PLAYLIST_FILE = "/Users/max/repos/starshine/playlist.txt"
-#PLAYLIST_FILE = "/home/sun/playlist.txt"
+#PLAYLIST_FILE = "/Users/max/repos/starshine/playlist.txt"
+PLAYLIST_FILE = "/home/pi/playlist.txt"
 
 movies = []
 
@@ -34,7 +34,8 @@ if __name__ == "__main__":
 
 	lengths = {}
 
-	for movie in movies:
-		lengths[movie] = getLength(movie)
+#	for movie in movies:
+#		print movie
+#		lengths[movie] = getLength(movie)
 
 	generatePlaylist(movies * 1000)
